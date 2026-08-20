@@ -50,6 +50,7 @@ const state = {
   dpi: 300,
   fmt: 'png',
   sheetFmt: 'pdf',
+  static: false,
   mirror: false,
   busy: false,
 };
@@ -123,16 +124,28 @@ function loadCrop(name, w, h) {
 // ------------------------------------------------------------------ loading
 
 async function boot() {
-  let list;
+  // With the Node server, /api/images lists images/ live. On a static host
+  // (GitHub Pages) there is no API, so fall back to a committed manifest and
+  // switch exports over to browser downloads.
+  let list = null;
   try {
-    list = await (await fetch('/api/images')).json();
-  } catch {
-    $('#loadstatus').textContent = 'Could not reach the server.';
-    return;
+    const res = await fetch('api/images');
+    if (res.ok) list = await res.json();
+  } catch { /* no server - fall through */ }
+
+  if (!list) {
+    state.static = true;
+    document.body.classList.add('is-static');
+    try {
+      const res = await fetch('images/index.json');
+      if (res.ok) list = await res.json();
+    } catch { /* no manifest either */ }
   }
 
-  if (!list.length) {
-    $('#loadstatus').textContent = 'No images found in images/';
+  if (!list || !list.length) {
+    $('#loadstatus').textContent = state.static
+      ? 'No bundled images. Use "Open images…" to load your own.'
+      : 'No images found in images/';
     return;
   }
 
@@ -158,9 +171,11 @@ async function boot() {
 }
 
 async function prepare(item) {
-  const res = await fetch(`/images/${encodeURIComponent(item.name)}`);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  item.blob = await res.blob();
+  if (!item.blob) {
+    const res = await fetch(`images/${encodeURIComponent(item.name)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    item.blob = await res.blob();
+  }
 
   const full = await createImageBitmap(item.blob);
   item.w = full.width;
@@ -236,6 +251,46 @@ function selectItem(i) {
 }
 
 const current = () => (state.active >= 0 ? state.items[state.active] : null);
+
+// Load images the user picks or drops. Works with or without the server -
+// the file is already in memory, so nothing needs fetching.
+async function addFiles(files) {
+  const picked = [...files].filter((f) => /^image\//.test(f.type));
+  if (!picked.length) return;
+
+  for (const file of picked) {
+    const item = { name: file.name, size: file.size, type: file.type, blob: file, ready: false };
+    state.items.push(item);
+    renderThumbs();
+    try {
+      await prepare(item);
+    } catch (err) {
+      item.error = String(err.message || err);
+      console.error(file.name, err);
+    }
+    renderThumbs();
+  }
+
+  $('#loadstatus').textContent = `${state.items.filter((i) => i.ready).length} images ready`;
+  const first = state.items.findIndex((i) => i.ready);
+  if (state.active === -1 && first >= 0) selectItem(first);
+}
+
+$('#btnOpen').onclick = () => $('#fileInput').click();
+$('#fileInput').onchange = (e) => { addFiles(e.target.files); e.target.value = ''; };
+
+// `stage` proper is declared further down; grab the element directly so this
+// does not depend on declaration order.
+const dropZone = $('#stage');
+for (const evt of ['dragenter', 'dragover']) {
+  dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.add('is-drop'); });
+}
+for (const evt of ['dragleave', 'drop']) {
+  dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.remove('is-drop'); });
+}
+dropZone.addEventListener('drop', (e) => {
+  if (e.dataTransfer?.files) addFiles(e.dataTransfer.files);
+});
 
 // ----------------------------------------------------------------- viewport
 
@@ -713,8 +768,21 @@ function toBlob(canvas) {
 }
 
 async function save(blob, name) {
+  if (state.static) {
+    // No server to write exports/, so hand the file to the browser instead.
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+    return { name, bytes: blob.size, path: name };
+  }
+
   const res = await fetch(
-    `/api/export?name=${encodeURIComponent(name)}&dpi=${state.dpi}`,
+    `api/export?name=${encodeURIComponent(name)}&dpi=${state.dpi}`,
     { method: 'POST', body: blob, headers: { 'Content-Type': 'application/octet-stream' } },
   );
   if (!res.ok) throw new Error(`save failed (${res.status})`);
@@ -939,7 +1007,7 @@ $('#btnCompare').onclick = () => withBusy('Building comparison…', async () => 
 });
 
 $('#btnReveal').onclick = async () => {
-  try { await fetch('/api/reveal', { method: 'POST' }); } catch {}
+  try { await fetch('api/reveal', { method: 'POST' }); } catch {}
 };
 
 // -------------------------------------------------------------------- shops
@@ -1043,7 +1111,7 @@ async function loadShops() {
   // A personal shops.json is gitignored; fall back to the shipped default so a
   // fresh clone still has something useful without carrying anyone's location.
   let groups = [];
-  for (const src of ['shops.json', 'shops.default.json']) {
+  for (const src of ['public/shops.json', 'public/shops.default.json']) {
     try {
       const res = await fetch(src);
       if (!res.ok) continue;

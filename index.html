@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Coaster Print Studio</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="public/styles.css">
 </head>
 <body>
 
@@ -25,6 +25,8 @@
 
   <aside class="filmstrip" id="filmstrip">
     <div class="strip-head">Images</div>
+    <button class="btn ghost wide" id="btnOpen">Open images&hellip;</button>
+    <input type="file" id="fileInput" accept="image/*" multiple hidden>
     <div id="thumbs" class="thumbs"></div>
     <div id="loadstatus" class="loadstatus">Loading&hellip;</div>
   </aside>
@@ -117,6 +119,7 @@
       <button class="btn wide" id="btnCompare" style="margin-top:10px">Build brightness test sheet</button>
       <p class="fine">Every image twice, at +15% and +25%, variants side by side for comparison. One PDF. Levels are labelled in the gutter, so the label is cut away with the waste.</p>
       <button class="btn ghost wide" id="btnReveal">Open exports folder</button>
+      <p class="fine static-only">No local server, so exports download through your browser instead of being written to <code>exports/</code>. Everything else works the same &mdash; nothing is uploaded anywhere.</p>
     </div>
 
   </aside>
@@ -165,7 +168,7 @@
 
 <div id="toast" class="toast"></div>
 
-<script src="pdf.js"></script>
-<script src="app.js"></script>
+<script src="public/pdf.js"></script>
+<script src="public/app.js"></script>
 </body>
 </html>

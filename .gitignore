@@ -14,6 +14,7 @@ node_modules/
 images/*
 !images/Edouard_Manet_-_The_Balcony_-_Google_Art_Project.jpg
 !images/Edouard_manet_le_grand_canal_224_venise101211).jpg
+!images/index.json
 
 # Composited sheets contain every image on the page, including ones excluded
 # above - keep them local so nothing leaks via a rendered sheet.

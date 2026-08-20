@@ -615,3 +615,25 @@ body {
   color: var(--fg-faint);
   line-height: 1.55;
 }
+
+/* --------------------------------------------------- static (no server) */
+
+.static-only { display: none; }
+body.is-static .static-only { display: block; }
+body.is-static #btnReveal { display: none; }
+
+.filmstrip #btnOpen { margin-bottom: 10px; }
+
+.stage.is-drop::after {
+  content: "Drop images to load";
+  position: absolute;
+  inset: 10px;
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+  color: var(--fg);
+  background: rgba(20, 21, 26, .78);
+  font-size: 13px;
+  pointer-events: none;
+}

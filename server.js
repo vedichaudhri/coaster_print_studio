@@ -229,10 +229,14 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, { ok: true });
     }
 
-    // Static front end.
+    // Static front end, served from the repo root so paths resolve exactly as
+    // they do on a static host like GitHub Pages.
     const rel = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
-    const full = path.resolve(PUBLIC_DIR, rel);
-    if (!full.startsWith(PUBLIC_DIR + path.sep)) return send(res, 403, 'Forbidden');
+    if (rel.split('/').some((seg) => seg.startsWith('.'))) return send(res, 403, 'Forbidden');
+    const full = path.resolve(ROOT, rel);
+    if (full !== path.join(ROOT, 'index.html') && !full.startsWith(ROOT + path.sep)) {
+      return send(res, 403, 'Forbidden');
+    }
     return serveStatic(res, full);
   } catch (err) {
     console.error(err);
