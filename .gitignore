@@ -18,3 +18,7 @@ images/*
 # Composited sheets contain every image on the page, including ones excluded
 # above - keep them local so nothing leaks via a rendered sheet.
 print_sheets/
+
+# Your own print-shop list is personal - it names where you live.
+# The app falls back to public/shops.default.json when this is absent.
+public/shops.json

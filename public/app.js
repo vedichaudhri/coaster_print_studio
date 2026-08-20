@@ -944,53 +944,170 @@ $('#btnReveal').onclick = async () => {
 
 // -------------------------------------------------------------------- shops
 
+const SHOPS_KEY = 'coaster:myshops';
+
+function myShops() {
+  try { return JSON.parse(localStorage.getItem(SHOPS_KEY)) || []; } catch { return []; }
+}
+
+function setMyShops(list) {
+  try { localStorage.setItem(SHOPS_KEY, JSON.stringify(list)); } catch {}
+}
+
+function shopCard(s, onRemove) {
+  const el = document.createElement(onRemove ? 'div' : 'a');
+  el.className = 'shop' + (onRemove ? ' mine' : '');
+  if (!onRemove) {
+    el.href = s.url;
+    el.target = '_blank';
+    el.rel = 'noopener noreferrer';
+  }
+
+  const nm = document.createElement('div');
+  nm.className = 'nm';
+  if (onRemove) {
+    const a = document.createElement('a');
+    a.href = s.url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.textContent = s.name;
+    nm.appendChild(a);
+  } else {
+    nm.textContent = s.name;
+  }
+  el.appendChild(nm);
+
+  for (const [cls, text] of [['area', s.area], ['note', s.note]]) {
+    if (!text) continue;
+    const d = document.createElement('div');
+    d.className = cls;
+    d.textContent = text;
+    el.appendChild(d);
+  }
+
+  const link = document.createElement('div');
+  link.className = 'link';
+  link.textContent = String(s.url || '').replace(/^https?:\/\//, '').slice(0, 46);
+  el.appendChild(link);
+
+  if (onRemove) {
+    const btn = document.createElement('button');
+    btn.className = 'shop-del';
+    btn.type = 'button';
+    btn.title = 'Remove';
+    btn.textContent = '\u00d7';
+    btn.onclick = onRemove;
+    el.appendChild(btn);
+  }
+  return el;
+}
+
+function renderGroup(host, title, note, shops, opts = {}) {
+  const sec = document.createElement('section');
+  sec.className = 'shop-group' + (opts.warn ? ' warn' : '');
+
+  const h = document.createElement('h3');
+  h.textContent = title;
+  sec.appendChild(h);
+
+  if (note) {
+    const p = document.createElement('p');
+    p.className = 'gnote';
+    p.textContent = note;
+    sec.appendChild(p);
+  }
+
+  if (!shops.length) {
+    if (opts.emptyText) {
+      const e = document.createElement('div');
+      e.className = 'shop-empty';
+      e.textContent = opts.emptyText;
+      sec.appendChild(e);
+    }
+  } else {
+    const grid = document.createElement('div');
+    grid.className = 'shop-grid';
+    shops.forEach((s, i) => grid.appendChild(shopCard(s, opts.removable ? () => {
+      const list = myShops();
+      list.splice(i, 1);
+      setMyShops(list);
+      loadShops();
+    } : null)));
+    sec.appendChild(grid);
+  }
+
+  host.appendChild(sec);
+}
+
 async function loadShops() {
-  let groups;
-  try {
-    groups = await (await fetch('shops.json')).json();
-  } catch {
-    return;
+  // A personal shops.json is gitignored; fall back to the shipped default so a
+  // fresh clone still has something useful without carrying anyone's location.
+  let groups = [];
+  for (const src of ['shops.json', 'shops.default.json']) {
+    try {
+      const res = await fetch(src);
+      if (!res.ok) continue;
+      groups = await res.json();
+      break;
+    } catch { /* try the next one */ }
   }
 
   const host = $('#shopGroups');
   host.innerHTML = '';
 
+  const mine = myShops();
+  renderGroup(
+    host, 'Your shops',
+    'Saved in this browser only — never written to the project or committed.',
+    mine,
+    {
+      removable: true,
+      emptyText: 'Nothing saved yet. Search above to find shops near you, then add the ones worth keeping.',
+    },
+  );
+
   for (const g of groups) {
-    const sec = document.createElement('section');
-    sec.className = 'shop-group' + (g.warn ? ' warn' : '');
-
-    const h = document.createElement('h3');
-    h.textContent = g.title;
-    sec.appendChild(h);
-
-    const note = document.createElement('p');
-    note.className = 'gnote';
-    note.textContent = g.note;
-    sec.appendChild(note);
-
-    const grid = document.createElement('div');
-    grid.className = 'shop-grid';
-
-    for (const s of g.shops) {
-      const a = document.createElement('a');
-      a.className = 'shop';
-      a.href = s.url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.innerHTML =
-        `<div class="nm"></div><div class="area"></div>` +
-        `<div class="note"></div><div class="link"></div>`;
-      a.querySelector('.nm').textContent = s.name;
-      a.querySelector('.area').textContent = s.area;
-      a.querySelector('.note').textContent = s.note;
-      a.querySelector('.link').textContent = s.url.replace(/^https?:\/\//, '').slice(0, 46);
-      grid.appendChild(a);
-    }
-
-    sec.appendChild(grid);
-    host.appendChild(sec);
+    renderGroup(host, g.title, g.note, g.shops || [], {
+      warn: g.warn,
+      emptyText: 'No shops listed here by default — use the search above to find local ones.',
+    });
   }
 }
+
+function mapSearch(query) {
+  const where = $('#nearInput').value.trim();
+  const q = where ? `${query} near ${where}` : query;
+  window.open(
+    `https://www.google.com/maps/search/${encodeURIComponent(q)}`,
+    '_blank',
+    'noopener',
+  );
+}
+
+$('#btnFindToner').onclick = () => mapSearch('color laser printing copy shop');
+$('#btnFindArt').onclick = () => mapSearch('fine art giclee printing');
+$('#nearInput').onkeydown = (e) => { if (e.key === 'Enter') $('#btnFindToner').click(); };
+
+$('#btnAddShop').onclick = () => {
+  const name = $('#shopName').value.trim();
+  let url = $('#shopUrl').value.trim();
+  if (!name) { toast('Give the shop a name first.', 2500, true); return; }
+  if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
+  if (!url) url = `https://www.google.com/maps/search/${encodeURIComponent(name)}`;
+
+  const list = myShops();
+  list.push({
+    name,
+    area: $('#shopArea').value.trim(),
+    note: $('#shopNote').value.trim(),
+    url,
+  });
+  setMyShops(list);
+
+  for (const id of ['#shopName', '#shopArea', '#shopUrl', '#shopNote']) $(id).value = '';
+  loadShops();
+  toast(`Added ${name}.`);
+};
 
 // --------------------------------------------------------------------- tabs
 

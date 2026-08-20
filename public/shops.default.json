@@ -1,0 +1,39 @@
+[
+  {
+    "title": "Laser / toner — what the decoupage method wants",
+    "note": "Toner is fused plastic sitting on the paper surface, so water-based Mod Podge goes over it without bleeding. Ask for colour laser, 100% scale, plain or lightweight paper — thin paper conforms to the tile better than cardstock. Most high-street copy shops, office-supply chains and shipping stores can do this while you wait, and it is cheap enough to reprint a sheet when a tile goes wrong. Use the search above to find one near you.",
+    "warn": false,
+    "shops": []
+  },
+  {
+    "title": "Fine-art inkjet — richer colour, but sacrifice a test tile",
+    "note": "Giclée studios print with pigment inkjet. Colour depth beats toner noticeably on paintings, and pigment ink is far more water-fast than dye — but it is still inkjet under water-based glue. Print one extra square, decoupage it onto a spare tile, and let it cure before committing the rest. Sealing the print with a light clear acrylic spray before gluing helps a lot.",
+    "warn": true,
+    "shops": []
+  },
+  {
+    "title": "Skip the craft — order finished coasters",
+    "note": "If you would rather not do the glue-and-seal cycle, these take an exported square and ship back a finished cork-backed coaster. Upload the full-coverage export rather than the bordered one.",
+    "warn": false,
+    "shops": [
+      {
+        "name": "Mpix",
+        "area": "Mail order",
+        "note": "Waterproof hardboard with gloss finish and cork backing, ships in about 48 hours.",
+        "url": "https://www.mpix.com/photo-gifts/photo-coasters"
+      },
+      {
+        "name": "Printful",
+        "area": "Mail order",
+        "note": "Square cork-back coasters, high-gloss, no minimum order — a single set is fine.",
+        "url": "https://www.printful.com/custom-coasters"
+      },
+      {
+        "name": "Contrado",
+        "area": "Mail order",
+        "note": "Hardwood-based printed coasters, sharp HD reproduction. Good if you want a wood edge rather than cork.",
+        "url": "https://www.contrado.com/printed-coasters"
+      }
+    ]
+  }
+]

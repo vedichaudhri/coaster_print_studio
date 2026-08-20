@@ -126,7 +126,7 @@ Two things that are easy to lose in translation:
    when wet Mod Podge goes over it. Inkjet ink can run.
 
 Plain or lightweight paper beats cardstock — thin paper conforms to the tile and the edges
-disappear under the sealer. See the **Print shops** tab for options near Potrero Hill.
+disappear under the sealer. See the **Print shops** tab to find somewhere near you.
 
 ## Making the coasters
 
@@ -148,6 +148,25 @@ backing pads, sponge brush, rubbing alcohol.
 
 If you go the fine-art inkjet route instead of toner, spray one print with clear acrylic
 sealer *before* gluing and test it on a spare tile first.
+
+## Print shops
+
+The **Print shops** tab explains what to ask for — toner rather than inkjet, 100% scale, plain
+paper — and then helps you find somewhere local: type a city or postcode and it opens a map
+search. Shops you want to keep can be saved via *Add a shop of your own*; they live in your
+browser's local storage, never in the project.
+
+`public/shops.default.json` ships with mail-order coaster services only, deliberately carrying
+no local listings. Create `public/shops.json` in the same shape to keep your own curated list —
+it's gitignored, so it stays off GitHub along with wherever you happen to live.
+
+## Licence
+
+MIT, see [LICENSE](LICENSE).
+
+The two example images are photographic reproductions of paintings by Édouard Manet
+(1832–1883) and are in the public domain worldwide — *The Balcony* (c. 1868–69) and *The Grand
+Canal of Venice* (1875). They aren't covered by the MIT licence and don't need to be.
 
 ## Layout
 

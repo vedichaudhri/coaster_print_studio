@@ -134,6 +134,31 @@
         on plain or lightweight paper. Thin paper actually conforms to the tile better than cardstock.
       </p>
     </div>
+
+    <div class="shop-tools">
+      <label class="lbl" for="nearInput">Find shops near you</label>
+      <div class="tool-row">
+        <input id="nearInput" class="txt" type="text" placeholder="City, neighbourhood or postcode" autocomplete="off">
+        <button class="btn" id="btnFindToner">Laser &amp; copy shops</button>
+        <button class="btn" id="btnFindArt">Fine&#8209;art printers</button>
+      </div>
+      <p class="fine">Opens a map search in a new tab. Nothing you type is stored or sent anywhere by this app.</p>
+
+      <details class="add-shop">
+        <summary>Add a shop of your own</summary>
+        <div class="tool-row">
+          <input id="shopName" class="txt" type="text" placeholder="Name" autocomplete="off">
+          <input id="shopArea" class="txt" type="text" placeholder="Area (optional)" autocomplete="off">
+        </div>
+        <div class="tool-row">
+          <input id="shopUrl" class="txt" type="text" placeholder="https://… or a map link" autocomplete="off">
+          <button class="btn primary" id="btnAddShop">Add</button>
+        </div>
+        <input id="shopNote" class="txt" type="text" placeholder="Note — what they're good for (optional)" autocomplete="off">
+        <p class="fine">Saved in this browser only, never written to the project or committed to git.</p>
+      </details>
+    </div>
+
     <div id="shopGroups" class="shop-groups"></div>
   </div>
 </section>
