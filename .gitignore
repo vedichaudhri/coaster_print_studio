@@ -1,0 +1,20 @@
+# Generated output - rebuilt by the app, and large
+exports/
+
+# Local tooling / OS cruft
+.claude/
+.DS_Store
+**/.DS_Store
+node_modules/
+
+# Source artwork.
+# images/ is ignored by default so nothing lands in a public repo by accident.
+# Only the two public-domain Manet examples are allowlisted below; drop your own
+# images into images/ and they stay local unless you explicitly add them.
+images/*
+!images/Edouard_Manet_-_The_Balcony_-_Google_Art_Project.jpg
+!images/Edouard_manet_le_grand_canal_224_venise101211).jpg
+
+# Composited sheets contain every image on the page, including ones excluded
+# above - keep them local so nothing leaks via a rendered sheet.
+print_sheets/

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coaster Print Studio</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="dot"></span>
+    <h1>Coaster Print Studio</h1>
+    <span class="sub">4&times;4&Prime; tiles &middot; Mod&nbsp;Podge decoupage</span>
+  </div>
+  <nav class="tabs">
+    <button class="tab is-active" data-view="crop">Crop</button>
+    <button class="tab" data-view="shops">Print shops</button>
+  </nav>
+</header>
+
+<!-- ============================================================ CROP VIEW -->
+<main id="view-crop" class="view">
+
+  <aside class="filmstrip" id="filmstrip">
+    <div class="strip-head">Images</div>
+    <div id="thumbs" class="thumbs"></div>
+    <div id="loadstatus" class="loadstatus">Loading&hellip;</div>
+  </aside>
+
+  <section class="stage-wrap">
+    <div class="stage-head">
+      <span id="stageTitle" class="stage-title">&nbsp;</span>
+      <span id="stageDims" class="stage-dims"></span>
+    </div>
+    <div class="stage" id="stage">
+      <canvas id="stageCanvas"></canvas>
+    </div>
+    <div class="stage-foot">
+      <div class="hint">Drag to move &middot; scroll to resize &middot; arrows nudge (&#8679; = 10px)</div>
+      <div class="stage-actions">
+        <button class="btn" id="btnFill">Fill</button>
+        <button class="btn" id="btnRotate">Rotate 90&deg;</button>
+        <button class="btn" id="btnReset">Reset</button>
+      </div>
+    </div>
+  </section>
+
+  <aside class="panel">
+
+    <div class="block">
+      <div class="block-head">Tile preview</div>
+      <div class="tile-preview">
+        <canvas id="tileCanvas" width="520" height="520"></canvas>
+      </div>
+      <div id="tileNote" class="tile-note"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">Adjust</div>
+      <label class="lbl lbl-row" for="rngBright">
+        <span>Brightness</span><span id="brightVal" class="val">+12%</span>
+      </label>
+      <input type="range" id="rngBright" class="rng" min="-10" max="30" step="1" value="12">
+      <div class="rng-scale"><span>&minus;10</span><span>0</span><span>+30</span></div>
+      <p class="fine">Toner lays down darker than the screen, so a 10&ndash;15% lift usually lands right. Saved per image.</p>
+      <button class="btn ghost wide" id="btnBrightReset">Reset to +12%</button>
+    </div>
+
+    <div class="block">
+      <div class="block-head">Print quality</div>
+      <div id="quality" class="quality">&nbsp;</div>
+      <div id="qualityBar" class="qbar"><i></i></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">Output</div>
+
+      <label class="lbl">Size on tile</label>
+      <div class="seg" id="segSize">
+        <button class="seg-btn is-on" data-size="3.8">3.8&Prime; <em>border</em></button>
+        <button class="seg-btn" data-size="4.0">4.0&Prime; <em>flush</em></button>
+        <button class="seg-btn" data-size="4.1">4.1&Prime; <em>overhang</em></button>
+      </div>
+
+      <label class="lbl">Resolution</label>
+      <div class="seg" id="segDpi">
+        <button class="seg-btn is-on" data-dpi="300">300 <em>toner</em></button>
+        <button class="seg-btn" data-dpi="600">600 <em>inkjet</em></button>
+      </div>
+      <p class="fine">300&nbsp;DPI is the right target for a copy-shop laser. 600 only helps on a photo inkjet.</p>
+
+      <label class="lbl">Format</label>
+      <div class="seg" id="segFmt">
+        <button class="seg-btn is-on" data-fmt="png">PNG <em>lossless</em></button>
+        <button class="seg-btn" data-fmt="jpeg">JPEG <em>smaller</em></button>
+      </div>
+
+      <label class="row-check">
+        <input type="checkbox" id="chkMirror">
+        <span>Mirror horizontally</span>
+      </label>
+      <p class="fine">Leave off for decoupage. Only needed for Mod&nbsp;Podge <em>photo transfer medium</em>, where the print goes face-down.</p>
+    </div>
+
+    <div class="block">
+      <button class="btn primary wide" id="btnExport">Export this square</button>
+      <button class="btn wide" id="btnExportAll">Export all four</button>
+      <div class="divider"></div>
+      <div class="seg" id="segSheetFmt">
+        <button class="seg-btn is-on" data-sheetfmt="pdf">PDF <em>upload</em></button>
+        <button class="seg-btn" data-sheetfmt="png">PNG <em>in&#8209;store</em></button>
+      </div>
+      <button class="btn accent wide" id="btnSheet" style="margin-top:7px">Build print sheet</button>
+      <p class="fine">All four squares at true size with cut marks &mdash; the file you hand the copy shop. Multi-page layouts come out as one PDF, so there is never a reason to merge files by hand.</p>
+      <button class="btn wide" id="btnCompare" style="margin-top:10px">Build brightness test sheet</button>
+      <p class="fine">Every image twice, at +15% and +25%, variants side by side for comparison. One PDF. Levels are labelled in the gutter, so the label is cut away with the waste.</p>
+      <button class="btn ghost wide" id="btnReveal">Open exports folder</button>
+    </div>
+
+  </aside>
+</main>
+
+<!-- =========================================================== SHOPS VIEW -->
+<section id="view-shops" class="view is-hidden">
+  <div class="shops-inner">
+    <div class="shops-intro">
+      <h2>Where to print these</h2>
+      <p>
+        Your method glues the print face-up and seals it with water-based Mod&nbsp;Podge, so
+        <strong>toner beats inkjet</strong> &mdash; toner is fused plastic sitting on the paper and
+        will not bleed when wet glue goes over it. Ask for a <strong>colour laser print at 100% scale</strong>
+        on plain or lightweight paper. Thin paper actually conforms to the tile better than cardstock.
+      </p>
+    </div>
+    <div id="shopGroups" class="shop-groups"></div>
+  </div>
+</section>
+
+<div id="toast" class="toast"></div>
+
+<script src="pdf.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

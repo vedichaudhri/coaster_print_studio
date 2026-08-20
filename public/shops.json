@@ -1,0 +1,95 @@
+[
+  {
+    "title": "Laser / toner — what your method wants",
+    "note": "Toner is fused plastic sitting on the paper surface, so water-based Mod Podge goes over it without bleeding. Ask for colour laser, 100% scale, plain or lightweight paper. Cheap enough to reprint a sheet when a tile goes wrong.",
+    "warn": false,
+    "shops": [
+      {
+        "name": "Post & Parcel",
+        "area": "Potrero Hill",
+        "note": "Closest option to you. Small neighbourhood shop, good for last-minute jobs — call ahead to confirm colour laser.",
+        "url": "https://www.google.com/maps/search/Post+%26+Parcel+Potrero+Hill+San+Francisco"
+      },
+      {
+        "name": "City Copy & Print Center",
+        "area": "SOMA · 837 Mission St",
+        "note": "Digital printing, fast turnaround, walk-in friendly. A short hop from Potrero Hill.",
+        "url": "https://www.citycopyprintcenter.com/"
+      },
+      {
+        "name": "Duxwell Printing",
+        "area": "Mission",
+        "note": "Well-reviewed one-stop print shop; helpful if you want advice on paper weight for the transfer.",
+        "url": "https://www.google.com/maps/search/Duxwell+Printing+San+Francisco"
+      },
+      {
+        "name": "AlphaGraphics SF Mission",
+        "area": "Mission",
+        "note": "Full-service commercial shop. Reliable colour laser output, slightly more corporate pricing.",
+        "url": "https://www.google.com/maps/search/AlphaGraphics+Mission+San+Francisco"
+      },
+      {
+        "name": "FedEx Office",
+        "area": "Multiple SF locations",
+        "note": "Self-serve colour laser, open late. Upload the sheet ahead of time — but check 'Actual Size' in their print dialog.",
+        "url": "https://local.fedex.com/en-us/ca/san-francisco"
+      },
+      {
+        "name": "The UPS Store",
+        "area": "Multiple SF locations",
+        "note": "Counter-service colour laser and copies. Fine for a single sheet of four squares.",
+        "url": "https://locations.theupsstore.com/ca/san-francisco"
+      }
+    ]
+  },
+  {
+    "title": "Fine-art inkjet — richer colour, but sacrifice a test tile",
+    "note": "All three are pigment inkjet (giclée) studios. Colour depth beats toner noticeably on the Manet paintings. Pigment ink is far more water-fast than dye, but it is still inkjet under water-based glue — print one extra square, decoupage it onto a spare tile, and let it cure before committing the rest. Sealing the print with a light clear acrylic spray before gluing also helps a lot.",
+    "warn": true,
+    "shops": [
+      {
+        "name": "Scale Up Art",
+        "area": "Dogpatch · walkable",
+        "note": "Artist-owned giclée and photo studio, the nearest fine-art lab to Potrero Hill. Giclée, metal, canvas, acrylic face-mounts.",
+        "url": "https://scaleupart.com/"
+      },
+      {
+        "name": "Dickerman Prints",
+        "area": "Mission Dolores",
+        "note": "Museum-quality pigment prints on fine art paper or canvas. Walk-in workstations or order online.",
+        "url": "https://www.dickermanprints.com/"
+      },
+      {
+        "name": "Hanson Digital",
+        "area": "Bay Area",
+        "note": "Archival pigment printing and fine-art scanning since 2003. Worth it if you ever want large reproductions of these Manets.",
+        "url": "https://www.hansondigital.com/"
+      }
+    ]
+  },
+  {
+    "title": "Skip the craft — order finished coasters",
+    "note": "If a tile goes wrong and you would rather not redo the glue-and-seal cycle, these take your exported square and ship back a finished cork-backed coaster. Upload the 4.0″ full-coverage export, not the 3.8″ bordered one.",
+    "warn": false,
+    "shops": [
+      {
+        "name": "Mpix",
+        "area": "Mail order",
+        "note": "Waterproof hardboard with gloss finish and cork backing, ships in about 48 hours. Family-run lab with a strong reputation.",
+        "url": "https://www.mpix.com/photo-gifts/photo-coasters"
+      },
+      {
+        "name": "Printful",
+        "area": "Mail order",
+        "note": "Square cork-back coasters, high-gloss, no minimum order — a single set is fine.",
+        "url": "https://www.printful.com/custom-coasters"
+      },
+      {
+        "name": "Contrado",
+        "area": "Mail order",
+        "note": "Hardwood-based printed coasters, sharp HD reproduction. Good if you want a wood edge rather than cork.",
+        "url": "https://www.contrado.com/printed-coasters"
+      }
+    ]
+  }
+]
